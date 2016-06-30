@@ -1,3 +1,8 @@
+# encoding: UTF-8
+
+# Autor: Georvic Tur
+# Carnet: 12-11402
+# Email: alexanderstower@gmail.com
 
 module BFS
     
@@ -60,7 +65,7 @@ module DFS
                 nodos_al_reves << hijo if hijo != nil
             end
             
-            nodo = nodo + nodos_al_reves.reverse
+            nodos = nodos + nodos_al_reves.reverse
             
             yield nodo
         end
@@ -75,16 +80,17 @@ module DFS
             elementos_dfs << elemento
         end
         
-        elementos_bfs.inject(nil, &bloque)
+        elementos_dfs.inject(valor_base, &bloque)
     end
 end
 
-class NodoArbolBin
+
+class ArbolBinario
     
     include BFS
+    include DFS
     
-    
-    def initialize(val,iz,de)
+    def initialize(val=nil,iz=nil,de=nil)
         @izq=iz
         @der=de
         @valor=val
@@ -92,6 +98,7 @@ class NodoArbolBin
     end
     
     attr_accessor :valor, :izq, :der
+    
     
     def each()
         yield izq
@@ -105,12 +112,12 @@ class NodoArbolBin
 end
 
 
-class NodoArbolRosa
+class ArbolRosa
         
     include BFS
+    include DFS
     
-    
-    def initialize(val, hijs)
+    def initialize(val=nil, hijs=nil)
         @valor=val
         @hijos=hijs
         @auto = self
@@ -279,3 +286,10 @@ class Oscuro < Mutador
         objeto.mutar_oscuro
     end
 end
+
+
+
+
+
+
+
