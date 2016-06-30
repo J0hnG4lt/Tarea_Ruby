@@ -4,9 +4,10 @@
 # Carnet: 12-11402
 # Email: alexanderstower@gmail.com
 
+
 module BFS
     
-    def recoger(&bloque)
+    def recoger(s,&bloque)
         
         elementos_bfs = []
         
@@ -24,7 +25,7 @@ module BFS
         nodos = []
         
         each do |hijo|
-            nodos << hijo if hijo != nil
+            nodos << hijo if not hijo.nil?
         end
         
         nodo = nil
@@ -32,12 +33,12 @@ module BFS
         until nodos.empty? do
             
             nodo = nodos.shift
-            
+            yield nodo
             nodo.each do |hijo|
-                nodos << hijo if hijo != nil
+                nodos << hijo if not hijo.nil?
             end
             
-            yield nodo
+            
         end
     end
 end
@@ -87,8 +88,6 @@ end
 
 class ArbolBinario
     
-    include BFS
-    include DFS
     
     def initialize(val=nil,iz=nil,de=nil)
         @izq=iz
@@ -97,7 +96,7 @@ class ArbolBinario
         @auto = self
     end
     
-    attr_accessor :valor, :izq, :der
+    attr_accessor :valor, :izq, :der, :auto
     
     
     def each()
@@ -109,6 +108,9 @@ class ArbolBinario
         @valor = @valor.mutar(mutador)
     end
     
+    include BFS
+    include DFS
+    
 end
 
 
@@ -117,13 +119,13 @@ class ArbolRosa
     include BFS
     include DFS
     
-    def initialize(val=nil, hijs=nil)
+    def initialize(val=nil, *hijs)
         @valor=val
         @hijos=hijs
         @auto = self
     end
     
-    attr_accessor :valor, :hijos
+    attr_accessor :valor, :hijos, :auto
     
     def each()
         hijos.each() do |v|
@@ -216,6 +218,8 @@ class Array
     end
 end
 
+
+
 class String
     
     def mutar(mutador)
@@ -227,7 +231,7 @@ class String
         valor = ""
         nueva=""
         
-        self.each do |letra|
+        self.each_char do |letra|
             valor << letra.upcase if "singular".include?(letra)
             valor << letra if not "singular".include?(letra)
         end
@@ -248,7 +252,7 @@ class String
         der=""
         
         i=0
-        self.each do |letra|
+        self.each_char do |letra|
             der << letra if i % 2 == 0 
             izq << letra if i % 2 == 1
         end
@@ -269,20 +273,21 @@ end
 
 
 class Singular < Mutador
-    def operacion(objeto)
+    def self.operacion(objeto)
         objeto.mutar_singular
     end
 end
 
 
 class Uniforme < Mutador
-    def operacion(objeto)
+    def self.operacion(objeto)
         objeto.mutar_uniforme
     end
 end
 
+
 class Oscuro < Mutador
-    def operacion(objeto)
+    def self.operacion(objeto)
         objeto.mutar_oscuro
     end
 end
