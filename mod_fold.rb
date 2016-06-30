@@ -1,10 +1,14 @@
+# encoding: UTF-8
 
 # Autor: Georvic Tur
 # Carnet: 12-11402
 # Email: alexanderstower@gmail.com
 
+#   En este archivo se implementa el módulo DFS
+
 module DFS
     
+    # Recorre depth first el árbol
     def dfs
         
         yield @auto
@@ -32,7 +36,7 @@ module DFS
         end
     end
     
-    
+    #Ejecuta un fold con un operador suministrado en el bloque
     def fold(valor_base, &bloque)
         
         elementos_dfs = []

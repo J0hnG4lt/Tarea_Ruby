@@ -1,17 +1,24 @@
+# encoding: UTF-8
 
 # Autor: Georvic Tur
 # Carnet: 12-11402
 # Email: alexanderstower@gmail.com
 
+#   En este archivo se extienden las clases de Fixnum, String y Array.
+#   También se definen las clases Mutador, Singular, Uniforme y Oscuro.
 
+#   Extensión de Fixnum
 class Fixnum
     
+    #Encuentra el mutador indicado y lo ejecuta
+    #mutador puede ser Singular, Uniforme u Oscuro.
     def mutar(mutador)
         mutador.operacion(self)
     end
     
+    #Multiplica el primer dígito con la suma de los restantes
     def mutar_singular
-        
+    
         ultimo = self.modulo(10)
         iniciales = self.div(10)*10
         
@@ -25,17 +32,22 @@ class Fixnum
         
     end
     
+    #Computa el promedio de los dígitos
     def mutar_uniforme
         
-        acum = 0
-        self.each do |elem|
-            acum += elem
+        numero = self.div(1)
+        acum=0
+        
+        until numero <= 0 do
+            acum += numero.modulo(10)
+            numero = numero.div(10)*10
         end
         
         acum.to_f / self.length.to_f
         
     end
     
+    #Nueva instancia del número sin las posiciones impares
     def mutar_oscuro
         
         i=0
@@ -57,19 +69,24 @@ class Fixnum
     
 end
 
-
+#    Extensión de Array
 class Array
     
+    
+    #Encuentra el mutador indicado y lo ejecuta
+    #mutador puede ser Singular, Uniforme u Oscuro.
     def mutar(mutador)
         mutador.operacion(self)
     end
     
+    #Se interpolan los elementos en un String con espacios entre ellos
     def mutar_singular
         
         self.flatten
         self.join(" ")
     end
     
+    #Se llama al método mutar de cada elemento del arreglo
     def mutar_uniforme
         
         self.collect do |elem| 
@@ -77,19 +94,26 @@ class Array
         end
     end
     
+    #Se llama al método mutar de una muestra aleatoria del 50% de los elementos
     def mutar_oscuro
-        self.sample(self.length/2)
+        self.sample(self.length/2).collect do |elem|
+            elem.mutar_oscuro
+        end
     end
 end
 
 
-
+#    Extensión de String
 class String
     
+    
+    #Encuentra el mutador indicado y lo ejecuta
+    #mutador puede ser Singular, Uniforme u Oscuro.
     def mutar(mutador)
         mutador.operacion(self)
     end
     
+    #Caracteres pertenecientes a singular son puestos en mayúscula
     def mutar_singular
         
         valor = ""
@@ -104,12 +128,23 @@ class String
         
     end
     
+    #Quedan los caracteres en mayúscula y minúscula de manera intercalada
     def mutar_uniforme
         
-        self.swapcase
+        acum=""
+        letra2=''
+        i=0
+        self.each_char do |letra|
+            letra2 = letra.upcase if i % 2 == 0
+            letra2 = letra.downcase if i % 2 == 1
+            acum = acum + letra2
+        end
+        self.replace(acum)
         
     end
     
+    #Los elementos en posiciones impares se agrupan y se concatenan por la 
+    #izquierda con aquellos que estaban en posiciones pares
     def mutar_oscuro
         
         izq=""
@@ -128,7 +163,7 @@ class String
     
 end
 
-
+#    Padre de Singular, Uniforme y Oscuro
 class Mutador
     def initialize
         raise "No se puede instanciar la clase abstracta Mutador"

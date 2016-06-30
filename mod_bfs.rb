@@ -1,11 +1,15 @@
+# encoding: UTF-8
 
 # Autor: Georvic Tur
 # Carnet: 12-11402
 # Email: alexanderstower@gmail.com
 
+#    En este archivo se implementa el módulo BFS
+
 module BFS
     
-    def recoger(s,&bloque)
+    #Recorre con bfs el arbol y filtra los nodos según un predicado
+    def recoger(bloque)
         
         elementos_bfs = []
         
@@ -13,9 +17,13 @@ module BFS
             elementos_bfs << elemento
         end
         
-        elementos_bfs.select(&bloque)
+        seleccionados = elementos_bfs.select(&bloque)
+        seleccionados.each do |elem|
+            puts elem.valor
+        end
     end
     
+    #Reccore breadth first el árbol
     def bfs
         
         yield @auto
