@@ -32,15 +32,57 @@ module BFS
                 nodos << hijo if hijo != nil
             end
             
-            yield @auto
+            yield nodo
         end
     end
 end
 
+module DFS
+    
+    def dfs
+        
+        yield @auto
+        
+        nodos = []
+        
+        each do |hijo|
+            nodos << hijo if hijo != nil
+        end
+        
+        nodo = nil
+        
+        until nodos.empty? do
+            
+            nodo = nodos.pop
+            nodos_al_reves=[]
+            
+            nodo.each do |hijo|
+                nodos_al_reves << hijo if hijo != nil
+            end
+            
+            nodo = nodo + nodos_al_reves.reverse
+            
+            yield nodo
+        end
+    end
+    
+    
+    def fold(valor_base, &bloque)
+        
+        elementos_dfs = []
+        
+        dfs do |elemento|
+            elementos_dfs << elemento
+        end
+        
+        elementos_bfs.inject(nil, &bloque)
+    end
+end
 
 class NodoArbolBin
     
     include BFS
+    
     
     def initialize(val,iz,de)
         @izq=iz
@@ -55,7 +97,11 @@ class NodoArbolBin
         yield izq
         yield der
     end
-
+    
+    def mutar(mutador)
+        @valor = @valor.mutar(mutador)
+    end
+    
 end
 
 
@@ -76,6 +122,10 @@ class NodoArbolRosa
         hijos.each() do |v|
             yield v
         end
+    end
+    
+    def mutar(mutador)
+        @valor = @valor.mutar(mutador)
     end
     
 end
